@@ -46,7 +46,10 @@ function getDepartureTimes(STOP_ID, BUS_ID, DEVICE_ID, DISPL_NUM)
 	       end
             
         end
-	    commandArray["UpdateDevice"] =  DEVICE_ID.."|0|".. departimestext ..""
+	    print('Updating device: '..DEVICE_ID..' with text:' ..departimestext)
+        devUpdateText = DEVICE_ID.."|0|".. departimestext ..""
+	    table.insert (commandArray, { ['UpdateDevice'] = devUpdateText } )
+	    --commandArray["UpdateDevice"] =  devUpdateText
 	else
         --print ('Json data is empty or unreachable')
     end
