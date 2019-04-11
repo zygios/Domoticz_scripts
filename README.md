@@ -11,3 +11,4 @@ Domoticz script for home automotion (Lua, Dzevents)
 * get_Public_Transport.lua - Script for getting Vilnius public transport departure times using Trafi.com API.
 * WOL_PC.sh - shell script used in device "On action" script trigger to turn on PC.
 * shutdown_PC.sh - shell script used in device "Off action" script trigger to turn off PC.
+* OWM_data.lua - script gettin weather data from OpenWeatherMap.
