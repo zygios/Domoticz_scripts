@@ -1,4 +1,4 @@
-local checktime = 10				        --updating every 5 minutes
+local checktime = 10			        --updating every 10 minutes
 local url = 'http://api.openweathermap.org/data/2.5/'	--Open Weahter URL
 local City = "Vilnius,Lt"; 
 local APIKEY = "xxxx";
@@ -40,7 +40,7 @@ end
 function getForecastWeather()
    --  API call
    	local API_URL = url .."forecast?q=" .. City .. "&units=" .. units .. "&APPID=" .. APIKEY .. "&lang=" .. lang
-	--print("API_URL: "..API_URL)
+	print("API_URL: "..API_URL)
 	local config=assert(io.popen('curl "'..API_URL..'"'))
     local RAWjson = config:read('*all')
     config:close()
@@ -50,14 +50,20 @@ function getForecastWeather()
     local forcast_date = ''
     local forcast_time = ''
     local forcast_date = {}
+    local today = os.date("*t", os.time())
+    local add_date
     
     for k = 1, forecast_days do
+        local add_date = today
+        add_date.day = today.day + k
+        local f_date = os.time(add_date)
+        --print(os.date("%d/%m/%y", f_date))
         forcast_time = (math.floor(os.date("%H")/3 + 0.5)*3)+3
         if forcast_time == 24 then forcast_time = 0 end
-        forcast_date[k] = tostring(os.date("%Y"))  .. "-" .. tostring(os.date("%m")) .. "-".. string.format("%02d", (os.date("%d") + k)) .. " " .. string.format("%02d",forcast_time) .. ":00:00"
+        forcast_date[k] = tostring(os.date("%Y", f_date))  .. "-" .. tostring(os.date("%m", f_date)) .. "-".. string.format("%02d", os.date("%d", f_date)) .. " " .. string.format("%02d",forcast_time) .. ":00:00"
         --print(forcast_date[k])
+        add_date.day = today.day - k
     end
-    
     
     if (jsonData ~= nil) then
         --JsonweatherDays = #jsonData.weather
@@ -65,7 +71,6 @@ function getForecastWeather()
         m = 1;
         for i = 1, JsonList  do
             
-            --print("Data: " .. forcast_date)
             if contains(forcast_date, jsonData.list[i].dt_txt) then
                 --print("Suradom atitikima: " .. jsonData.list[i].dt_txt)
                 --print("dt_txt: " .. jsonData.list[i].dt_txt)
